@@ -10,9 +10,7 @@ import 'package:news_clean_app/injection_container.dart';
 
 class ArticleDetailView extends HookWidget {
   final ArticleEntity? article;
-  final bool isFromSavedArticle;
-  const ArticleDetailView(
-      {super.key, this.article, this.isFromSavedArticle = false});
+  const ArticleDetailView({super.key, this.article});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +20,7 @@ class ArticleDetailView extends HookWidget {
       child: Scaffold(
         appBar: const PrimaryAppBar(),
         body: _BuildBody(article: article),
-        floatingActionButton: _BuildFloationgActionButton(
-            article: article, isShowed: !isFromSavedArticle),
+        floatingActionButton: _BuildFloationgActionButton(article: article),
       ),
     );
   }
@@ -138,8 +135,7 @@ class _BuildArticleDescription extends StatelessWidget {
 
 class _BuildFloationgActionButton extends StatelessWidget {
   final ArticleEntity? article;
-  final bool isShowed;
-  const _BuildFloationgActionButton({this.article, required this.isShowed});
+  const _BuildFloationgActionButton({this.article});
 
   void _onFloatingActionButtonTapped(BuildContext context) {
     context.read<LocalArticleBloc>().add(SaveArticle(article!));

@@ -62,8 +62,7 @@ class _BuildArticleList extends StatelessWidget {
     }
 
     void onArticlePressed(BuildContext context, ArticleEntity article) {
-      Navigator.pushNamed(context, '/ArticleDetails',
-          arguments: [article, true]);
+      Navigator.pushNamed(context, '/ArticleDetails', arguments: article);
     }
 
     return ListView.builder(
