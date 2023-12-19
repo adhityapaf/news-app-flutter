@@ -7,7 +7,6 @@ part of 'app_database.dart';
 // **************************************************************************
 
 // ignore: avoid_classes_with_only_static_members
-// ignore_for_file: library_private_types_in_public_api
 class $FloorAppDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
@@ -155,6 +154,14 @@ class _$ArticleDao extends ArticleDao {
             urlToImage: row['urlToImage'] as String?,
             publishedAt: row['publishedAt'] as String?,
             content: row['content'] as String?));
+  }
+
+  @override
+  Future<bool?> checkIsArticleSaved(String title) async {
+    return _queryAdapter.query(
+        'SELECT EXISTS(SELECT * FROM article WHERE title = ?1)',
+        mapper: (Map<String, Object?> row) => (row.values.first as int) != 0,
+        arguments: [title]);
   }
 
   @override

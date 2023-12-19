@@ -20,3 +20,7 @@ class RemoveArticle extends LocalArticlesEvent {
 class SaveArticle extends LocalArticlesEvent {
   const SaveArticle(ArticleEntity article) : super(article: article);
 }
+
+class CheckIsArticleIsSaved extends LocalArticlesEvent {
+  const CheckIsArticleIsSaved(ArticleEntity article) : super(article: article);
+}

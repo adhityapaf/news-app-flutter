@@ -4,21 +4,26 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:news_clean_app/features/daily_news/domain/entities/article.dart';
 import 'package:news_clean_app/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_clean_app/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
+import 'package:news_clean_app/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 import 'package:news_clean_app/features/daily_news/presentation/widgets/primary_app_bar.dart';
 import 'package:news_clean_app/injection_container.dart';
 
 class ArticleDetailView extends HookWidget {
   final ArticleEntity? article;
-  const ArticleDetailView({super.key, this.article});
+  final bool isFromSavedArticle;
+  const ArticleDetailView(
+      {super.key, this.article, this.isFromSavedArticle = false});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<LocalArticleBloc>(),
+      create: (_) =>
+          sl<LocalArticleBloc>()..add(CheckIsArticleIsSaved(article!)),
       child: Scaffold(
         appBar: const PrimaryAppBar(),
         body: _BuildBody(article: article),
-        floatingActionButton: _BuildFloationgActionButton(article: article),
+        floatingActionButton: _BuildFloationgActionButton(
+            article: article, isShowed: !isFromSavedArticle),
       ),
     );
   }
@@ -133,7 +138,8 @@ class _BuildArticleDescription extends StatelessWidget {
 
 class _BuildFloationgActionButton extends StatelessWidget {
   final ArticleEntity? article;
-  const _BuildFloationgActionButton({this.article});
+  final bool isShowed;
+  const _BuildFloationgActionButton({this.article, required this.isShowed});
 
   void _onFloatingActionButtonTapped(BuildContext context) {
     context.read<LocalArticleBloc>().add(SaveArticle(article!));
@@ -147,12 +153,20 @@ class _BuildFloationgActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () => _onFloatingActionButtonTapped(context),
-      child: const Icon(
-        Icons.bookmark_add_rounded,
-        color: Colors.white,
-      ),
-    );
+    return BlocBuilder<LocalArticleBloc, LocalArticlesState>(
+        builder: (context, state) {
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        child: state.isArticleAlreadySaved == false
+            ? FloatingActionButton(
+                onPressed: () => _onFloatingActionButtonTapped(context),
+                child: const Icon(
+                  Icons.bookmark_add_rounded,
+                  color: Colors.white,
+                ),
+              )
+            : const SizedBox(),
+      );
+    });
   }
 }

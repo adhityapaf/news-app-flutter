@@ -11,4 +11,7 @@ abstract class ArticleDao {
 
   @Query('SELECT * FROM article')
   Future<List<ArticleModel>> getArticles();
+
+  @Query('SELECT EXISTS(SELECT * FROM article WHERE title = :title)')
+  Future<bool?> checkIsArticleSaved(String title);
 }

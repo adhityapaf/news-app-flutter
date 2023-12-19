@@ -55,4 +55,9 @@ class ArticleRepositoryImpl implements ArticleRepository {
     return _appDatabase.articleDao
         .insertArticle(ArticleModel.fromEntity(article));
   }
+
+  @override
+  Future<bool?> checkIsArticleSaved(String title) {
+    return _appDatabase.articleDao.checkIsArticleSaved(title);
+  }
 }

@@ -10,9 +10,21 @@ class AppRoutes {
       case '/':
         return _materialRoute(const DailyNews());
       case '/ArticleDetails':
-        return _materialRoute(ArticleDetailView(
-          article: settings.arguments as ArticleEntity,
-        ));
+        {
+          ArticleEntity? article;
+          bool isFromSavedArticle = false;
+          if (settings.arguments is List<dynamic>) {
+            List<dynamic> list = settings.arguments as List<dynamic>;
+            article = list[0] as ArticleEntity;
+            isFromSavedArticle = list[1] as bool;
+          } else {
+            article = settings.arguments as ArticleEntity;
+          }
+          return _materialRoute(ArticleDetailView(
+            article: article,
+            isFromSavedArticle: isFromSavedArticle,
+          ));
+        }
       case '/SavedArticles':
         return _materialRoute(const SavedArticles());
       default:
